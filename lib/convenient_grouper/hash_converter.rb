@@ -77,7 +77,7 @@ module ConvenientGrouper
     def array_str(array)
       _mapped = array.map { |v| insert_val(v) }
       mapped = _mapped.join(', ')
-      "IS IN (#{mapped})"
+      "IN (#{mapped})"
     end
 
     def value_str(value)

@@ -70,7 +70,7 @@ describe ConvenientGrouper::HashConverter do
     describe "success" do
       after do
         expect(subject).
-          to eq "CASE WHEN (age = 1) THEN 'first' WHEN (age = 2) THEN 'second' WHEN (age BETWEEN 3 AND 5) THEN 'third' WHEN (age IS IN ('one', 'two')) THEN 'four' ELSE '#{default}' END"
+          to eq "CASE WHEN (age = 1) THEN 'first' WHEN (age = 2) THEN 'second' WHEN (age BETWEEN 3 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' ELSE '#{default}' END"
       end
 
       context "with default group" do

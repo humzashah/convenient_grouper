@@ -4,7 +4,7 @@ This gem simplifies grouping records. The primary intention is to make group-agg
 
 To use, add the following to your Gemfile.
 
-    gem 'convenient_grouper', git: 'git@github.com:humzashah/convenient_grouper.git'
+    gem 'convenient_grouper'
 
 After `bundle install`, you can simply provide the grouping details as a hash with the column as the key:
 
