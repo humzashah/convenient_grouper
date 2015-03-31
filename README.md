@@ -1,12 +1,5 @@
 # ConvenientGrouper
 
-### URLs
-
-GitHub:   https://github.com/humzashah/convenient_grouper
-RubyGems: https://rubygems.org/gems/convenient_grouper
-
-### Description
-
 This gem simplifies grouping records. The primary intention is to make group-aggregation-methods easier.
 
 To use, add the following to your Gemfile.
