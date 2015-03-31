@@ -29,32 +29,38 @@ module ConvenientGrouper
     end
 
     def cases
+      parse_hash do |column, group, value|
+        "WHEN (#{column} #{lookup_str(value)}) THEN '#{group}'"
+      end
+    end
+
+    def parse_hash
       @hash.each_with_object([]) do |(column, values_hash), array|
         values_hash.each do |group, value|
-          array << "WHEN (#{column} #{lookup_str(value)}) THEN '#{group}'" if value
+          array << yield(column, group, value) if group
         end
       end
     end
 
     def default_group
-      group = @hash.values.first.key(nil) || DEFAULT_GROUP
+      hash = @hash.values.first
+      group = hash[nil] || DEFAULT_GROUP
       "ELSE '#{group}'"
     end
 
     def lookup_str(value)
-      method =
-        case value
-        when Range
-          :range_str
-        when Array
-          :array_str
-        when Numeric, String
-          :value_str
-        else
-          raise_error("Unsupported type #{value.class.name} for #{value}.")
-        end
-
-      send(method, value)
+      case value
+      when Range
+        range_str(value)
+      when Array
+        array_str(value)
+      when Numeric, String
+        value_str(value)
+      when NilClass
+        'IS NULL'
+      else
+        raise_error("Unsupported type #{value.class.name} for #{value}.")
+      end
     end
 
     def range_str(range)

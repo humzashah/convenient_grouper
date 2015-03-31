@@ -6,9 +6,9 @@ describe ConvenientGrouper::HashConverter do
     {
       column => {
         first: 1,
-        second: 2,
-        third: 3..5,
-        four: %w{one two}
+        third: 2..5,
+        four: %w{one two},
+        empty: nil
       }
     }
   end
@@ -68,16 +68,17 @@ describe ConvenientGrouper::HashConverter do
     end
 
     describe "success" do
-      after do
-        expect(subject).
-          to eq "CASE WHEN (age = 1) THEN 'first' WHEN (age = 2) THEN 'second' WHEN (age BETWEEN 3 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' ELSE '#{default}' END"
-      end
+      after { expect(subject).to eq(expected) }
 
       context "with default group" do
         let(:default) { 'def' }
         let(:arg) do
-          base_args[column][default] = nil
+          base_args[column][nil] = default
+          puts base_args
           base_args
+        end
+        let(:expected) do
+          "CASE WHEN (age = 1) THEN 'first' WHEN (age BETWEEN 2 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' WHEN (age IS NULL) THEN 'empty' ELSE 'def' END"
         end
         it {}
       end
@@ -85,6 +86,9 @@ describe ConvenientGrouper::HashConverter do
       context "without default group" do
         let(:default) { described_class.const_get('DEFAULT_GROUP') }
         let(:arg) { base_args }
+        let(:expected) do
+          "CASE WHEN (age = 1) THEN 'first' WHEN (age BETWEEN 2 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' WHEN (age IS NULL) THEN 'empty' ELSE 'others' END"
+        end
         it {}
       end
     end

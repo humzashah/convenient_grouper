@@ -12,9 +12,10 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
 
     Sale.
     group(created_at: {
+      # hash value could be nil, a particular value, a range, or an array
       february: Date.new(2015, 2)..Date.new(2015, 2, 28),
       january: Date.new(2015, 1)..Date.new(2015, 1, 31),
-      others: nil, # optional default group. default value == 'others'
+      nil => 'others' # optional default group. default value == 'others'
     }).
     sum(:proceeds)
     #=> {"february" => 271899, "january" => 565095, "others" => 15512466}
@@ -23,9 +24,9 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
 
     Employee.
     group(age: {
-      young_adults: 18..25, # here value could be a particular value, range, or array
+      young_adults: 18..25,
       adults: 25..35,
-      mature_adults: nil
+      nil => 'mature_adults'
     }).
     count
     #=> {"young_adults" => 13, "adults" => 15, "mature_adults" => 5}
