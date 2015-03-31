@@ -1,5 +1,12 @@
 # ConvenientGrouper
 
+### URLs
+
+GitHub:   https://github.com/humzashah/convenient_grouper
+RubyGems: https://rubygems.org/gems/convenient_grouper
+
+### Description
+
 This gem simplifies grouping records. The primary intention is to make group-aggregation-methods easier.
 
 To use, add the following to your Gemfile.
@@ -23,7 +30,7 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
 
     Employee.
     group(age: {
-      young_adults: 18..25,
+      young_adults: 18..25, # here value could be a particular value, range, or array
       adults: 25..35,
       mature_adults: nil
     }).
