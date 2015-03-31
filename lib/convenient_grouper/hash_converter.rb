@@ -2,14 +2,17 @@ require_relative "custom_error"
 
 module ConvenientGrouper
   class HashConverter
-    attr_reader :grouper
+    attr_reader :groups, :restrictions
 
     DEFAULT_GROUP = 'others'
 
-    def initialize(hash_arg)
+    def initialize(hash_arg, restrict: false)
       @hash = hash_arg
+      @restrict = restrict
+
       validate_hash
-      create_grouper
+      create_groups
+      create_restrictions
     end
 
     private
@@ -24,8 +27,17 @@ module ConvenientGrouper
       @hash.each_value.all? { |v| v.is_a?(Hash) }
     end
 
-    def create_grouper
-      @grouper = "CASE #{[*cases, default_group].compact.join(' ')} END"
+    def create_groups
+      @groups = "CASE #{[*cases, default_group].compact.join(' ')} END"
+    end
+
+    def create_restrictions
+      @restrictions =
+        if @restrict
+          parse_hash do |column, _, value|
+            "(#{column} #{lookup_str(value)})"
+          end.join(' OR ')
+        end || ""
     end
 
     def cases

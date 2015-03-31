@@ -31,11 +31,23 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
     count
     #=> {"young_adults" => 13, "adults" => 15, "mature_adults" => 5}
 
+### Example 3
+
+    grouping_hash = {
+      age: {
+        young_adults: 18..25
+        adults: 25..35
+      }
+    }
+
+    Employee.
+    group(
+      grouping_hash,
+      restrict: true # restrict rows to your grouped conditions
+    ).
+    count
+
 Admittedly, I've written this gem in haste and not tested special cases. But for "everyday" usage, things seem to be working well. You can presently use the hash for single-column groups, much like in the examples I've shown above.
-
-Adding support for multiple columns, auto-restricting records to ranges in hash, and auto-naming groups are all planned changes.
-
-I welcome bug-reports, issue highlights, and useful contributions.
 
 ## Contributing
 
