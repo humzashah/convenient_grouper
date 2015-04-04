@@ -47,13 +47,4 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
     ).
     count
 
-Admittedly, I've written this gem in haste and not tested special cases. But for "everyday" usage, things seem to be working well. You can presently use the hash for single-column groups, much like in the examples I've shown above.
-
-## Contributing
-
-1. Fork the project
-2. Create your feature branch
-3. Write RSpec tests for your changes
-4. Commit your changes
-5. Push to the branch
-6. Create a new 'Pull Request'
+Admittedly, I've written this gem in haste and not tested special cases. But things seemingly work well for the most usual use-cases. Nonetheless, I welcome bug-reports. I'll be working on the code myself but your contribution can be in the form of bug-reports and/or ideas.
