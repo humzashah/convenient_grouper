@@ -7,6 +7,10 @@ describe ConvenientGrouper::HashConverter do
       first: 1,
       third: 2..5,
       four: %w{one two},
+      five: "> 6",
+      six: ">= 7",
+      eight: "< 8",
+      nine: "<= 9",
       empty: nil
     }
   end
@@ -78,19 +82,17 @@ describe ConvenientGrouper::HashConverter do
     describe "groups" do
       let(:method) { :groups }
 
+      let(:expected) do
+        "CASE WHEN (age = 1) THEN 'first' WHEN (age BETWEEN 2 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' WHEN (age > 6) THEN 'five' WHEN (age >= 7) THEN 'six' WHEN (age < 8) THEN 'eight' WHEN (age <= 9) THEN 'nine' WHEN (age IS NULL) THEN 'empty' ELSE '#{default}' END"
+      end
+
       context "with default group" do
         let(:default) { 'def' }
-        let(:expected) do
-          "CASE WHEN (age = 1) THEN 'first' WHEN (age BETWEEN 2 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' WHEN (age IS NULL) THEN 'empty' ELSE '#{default}' END"
-        end
         it {}
       end
 
       context "without default group" do
         let(:default) { described_class::DEFAULT_GROUP }
-        let(:expected) do
-          "CASE WHEN (age = 1) THEN 'first' WHEN (age BETWEEN 2 AND 5) THEN 'third' WHEN (age IN ('one', 'two')) THEN 'four' WHEN (age IS NULL) THEN 'empty' ELSE 'others' END"
-        end
         it {}
       end
     end
@@ -101,7 +103,7 @@ describe ConvenientGrouper::HashConverter do
       context "restricted" do
         let(:restricted) { true }
         let(:expected) do
-          "(age = 1) OR (age BETWEEN 2 AND 5) OR (age IN ('one', 'two')) OR (age IS NULL)"
+          "(age = 1) OR (age BETWEEN 2 AND 5) OR (age IN ('one', 'two')) OR (age > 6) OR (age >= 7) OR (age < 8) OR (age <= 9) OR (age IS NULL)"
         end
         it {}
       end

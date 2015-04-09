@@ -10,41 +10,34 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
 
 ### Example 1
 
-    Sale.
-    group(created_at: {
-      # hash value could be nil, a particular value, a range, or an array
-      february: Date.new(2015, 2)..Date.new(2015, 2, 28),
-      january: Date.new(2015, 1)..Date.new(2015, 1, 31),
-      nil => 'others' # optional default group. default value == 'others'
-    }).
-    sum(:proceeds)
-    #=> {"february" => 271899, "january" => 565095, "others" => 15512466}
+    Sale.group({
+      date_of_sale: {
+        Jan: Date.new(2015, 1)..Date.new(2015, 1, 31),
+        date: Date.new(2014, 4, 5),
+        dates: [Date.new(2014, 1, 2), Date.new(2014, 2, 1)],
+        unspecified: nil,
+        nil => 'others' # optional default group. default value == 'others'
+      }
+    }).sum(:profit)
+    #=> {"Jan" => 3100, "date" => 100, "dates" => 200, "unspecified" => 50, "others" => 100000}
 
 ### Example 2
 
-    Employee.
-    group(age: {
-      young_adults: 18..25,
-      adults: 25..35,
-      nil => 'mature_adults'
-    }).
-    count
-    #=> {"young_adults" => 13, "adults" => 15, "mature_adults" => 5}
+    Employee.group({
+      age: {
+        young_adults: 18..25,
+        adults: 25..35,
+        seniors: ">= 60",
+        nil => 'mature_adults'
+      }
+    }).count
+    #=> {"young_adults" => 13, "adults" => 15, "seniors" => 4, "mature_adults" => 5}
 
 ### Example 3
 
-    grouping_hash = {
-      age: {
-        young_adults: 18..25
-        adults: 25..35
-      }
-    }
+    # restrict rows/query to your grouped conditions
+    hash = {age: {adults: ">= 18"}}
+    Employee.group(hash, restrict: true).count
+    # ^ that is the equivalent of Employee.where("age >= 18").group(hash).count
 
-    Employee.
-    group(
-      grouping_hash,
-      restrict: true # restrict rows to your grouped conditions
-    ).
-    count
-
-Admittedly, I've written this gem in haste and not tested special cases. But things seemingly work well for the most usual use-cases. Nonetheless, I welcome bug-reports. I'll be working on the code myself but your contribution can be in the form of bug-reports and/or ideas.
+Things seemingly work well for the most usual use-cases. Nonetheless, bug-reports are welcomed.
