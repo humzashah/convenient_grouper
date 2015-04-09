@@ -23,13 +23,15 @@ describe ConvenientGrouper::HashConverter do
     subject { instance }
 
     describe "proper arguments" do
+      after { should be_a described_class }
+
       context "restricted" do
         let(:restricted) { true }
-        it { should be_true }
+        it {}
       end
 
       context "unrestricted" do
-        it { should be_true }
+        it {}
       end
     end
 

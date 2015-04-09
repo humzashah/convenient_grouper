@@ -1,0 +1,9 @@
+language: ruby
+rvm:
+  - 2.0.0
+  - 2.2.0
+env: RAKE_ENV=test RAILS_ENV=test
+before_install:
+  - 'gem install bundler'
+script:
+  - 'bundle exec rspec'
