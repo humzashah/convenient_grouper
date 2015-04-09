@@ -19,7 +19,7 @@ After `bundle install`, you can simply provide the grouping details as a hash wi
         nil => 'others' # optional default group. default value == 'others'
       }
     }).sum(:profit)
-    #=> {"Jan" => 3100, "date" => 100, "dates" => 200, "unspecified" => 50, "others" => 100000}
+    #=> {"Jan" => 1550, "date" => 50, "dates" => 100, "unspecified" => 25, "others" => 50000}
 
 ### Example 2
 
