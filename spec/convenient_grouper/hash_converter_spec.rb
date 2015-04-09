@@ -16,23 +16,8 @@ describe ConvenientGrouper::HashConverter do
     {column => group_hash.merge(hash)}
   end
 
-
   let(:restricted) { false }
   let(:instance) { described_class.new(arg, restrict: restricted) }
-
-  describe "overrides ActiveRecord::Relation's group method" do
-    before do
-      expect_any_instance_of(described_class).
-        to receive(:groups)
-
-      expect(described_class).
-        to receive(:new).with(arg).and_call_original
-    end
-
-    it "interjects ActiveRecord::Relation 'group'" do
-      ActiveRecord::Relation.new(nil, nil).group(arg)
-    end
-  end
 
   describe "initialization" do
     subject { instance }
