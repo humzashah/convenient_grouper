@@ -16,7 +16,7 @@ describe ConvenientGrouper do
       let(:options) { {one: 1} }
 
       it "raises error for improper options" do
-        expect{ subject }.to raise_error(ConvenientGrouper::CustomError)
+        expect{ subject }.to raise_error(ConvenientGrouper::Error)
       end
     end
 

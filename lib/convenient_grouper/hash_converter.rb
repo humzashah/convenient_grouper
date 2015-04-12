@@ -1,11 +1,11 @@
-require_relative "custom_error"
+require_relative "error"
 
 module ConvenientGrouper
   class HashConverter
     attr_reader :groups, :restrictions
 
     module Regex
-      COMPARISON = /^[<, >]={0,1}\s.+/ # e.g. '> 1', '<= 4'
+      COMPARISON = /^[<, >]={0,1}\s.+$/ # e.g. '> 1' and '<= 4'
     end
 
     module Default
@@ -42,7 +42,6 @@ module ConvenientGrouper
 
       valid_keys_str = valid_keys.join(', ')
       invalid_keys_str = invalid_keys.join(', ')
-      raise CustomError
       raise_error "You provided invalid options: #{invalid_keys_str}. Supported options include: #{valid_keys_str}."
     end
 
@@ -60,14 +59,14 @@ module ConvenientGrouper
       @restrictions =
         if @restrict
           parse_hash do |column, _, value|
-            "(#{column} #{lookup_str(value)})"
+            column_value_matcher(column, value)
           end.join(' OR ')
         end || ""
     end
 
     def cases
       parse_hash do |column, group, value|
-        "WHEN (#{column} #{lookup_str(value)}) THEN '#{group}'"
+        "WHEN #{column_value_matcher(column, value)} THEN '#{group}'"
       end
     end
 
@@ -77,6 +76,10 @@ module ConvenientGrouper
           array << yield(column, group, value) if group
         end
       end
+    end
+
+    def column_value_matcher(column, value)
+      "(#{column} #{lookup_str(value)})"
     end
 
     def default_group
@@ -137,7 +140,7 @@ module ConvenientGrouper
     end
 
     def raise_error(msg)
-      raise CustomError.new(msg)
+      raise Error.new(msg)
     end
 
   end

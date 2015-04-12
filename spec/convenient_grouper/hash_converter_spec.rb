@@ -42,7 +42,7 @@ describe ConvenientGrouper::HashConverter do
     describe "improper arguments" do
       after do
         expect{ subject }.
-          to raise_error(ConvenientGrouper::CustomError)
+          to raise_error(ConvenientGrouper::Error)
       end
 
       context "error before create_groups" do
