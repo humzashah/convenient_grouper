@@ -80,7 +80,7 @@ describe ConvenientGrouper::HashConverter do
 
     before do
       expect(ConvenientGrouper::Regex).
-        to receive(:matcher).
+        to receive(:matches?).
           at_least(:once).
             and_call_original
     end

@@ -10,6 +10,8 @@ After `bundle install`, you can provide the grouping details as a hash with the 
 
 ### Usage:
 
+    ModelName.group(grouping_hash, options)
+
 First argument to method is a grouping hash:
 
     grouping_hash = {
@@ -28,19 +30,17 @@ First argument to method is a grouping hash:
       }
     }
 
-Second argument is optional. So far, the options include:
+Second argument is an optional hash:
 
     options = {
       restrict: boolean # restrict query to grouped conditions. defaults to false.
     }
 
-Method call:
-
-    ModelName.group(grouping_hash, options)
-
-If you pass only one non-hash argument, you'll be using `ActiveRecord`'s own `group` method.
+If you pass only one non-hash argument, you will be using `ActiveRecord`'s own `group` method.
 
 ### Example 1
+
+Getting profits for different dates and date-ranges from a `Sale` model:
 
     Sale.group({
       date_of_sale: {
@@ -54,6 +54,8 @@ If you pass only one non-hash argument, you'll be using `ActiveRecord`'s own `gr
 
 ### Example 2
 
+Counting employees in various age-groups:
+
     Employee.group({
       age: {
         young_adults: 18..25,
@@ -66,6 +68,8 @@ If you pass only one non-hash argument, you'll be using `ActiveRecord`'s own `gr
 
 ### Example 3
 
+Grouping events that are occurring after a particular date:
+
     date = Date.new(2015, 6, 22)
     Event.group(date: {
       not_on_date: ">= #{date}"
@@ -73,9 +77,25 @@ If you pass only one non-hash argument, you'll be using `ActiveRecord`'s own `gr
 
 ### Example 4
 
+Restricting your query to the conditions specified in your `group` clause:
+
     range = 13..19
     Relative.group({
       age: {teens: range}
     }, restrict: true) # == Employee.where(age: range).group(hash)
+
+### Heads-Up
+
+A heads-up for specifying the extra options such as `restrict`:
+
+Ruby will interpret the following as a single hash-argument:
+
+    Relative.group(age: {teens: 13..19}, restrict: true) # wrong
+
+Therefore you will need appropriate curly braces:
+
+    Relative.group({age: {teens: 13..19}}, {restrict: true}) # right
+
+### Bug Reports
 
 Things seemingly work well for the most usual use-cases. Nonetheless, bug-reports are welcomed.

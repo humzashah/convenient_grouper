@@ -91,7 +91,7 @@ module ConvenientGrouper
         range_str(value)
       when Array
         array_str(value)
-      when Regex.matcher
+      when lambda { |x| Regex.matches?(x) }
         value
       when Numeric, String
         value_str(value)

@@ -2,26 +2,33 @@ require "spec_helper"
 
 describe ConvenientGrouper::Regex do
 
-  describe "matches?" do
-    subject { described_class.matcher.call(arg) }
-
-    before do
-      expect_any_instance_of(String).
-        to receive(:strip).
-          at_least(:once).
-            and_call_original
-    end
-
+  describe "self.matches?" do
+    subject { described_class.matches?(arg) }
     after { expect(subject).to eq expectation }
 
-    context "improper argument " do
-      let(:arg) { "! 1" }
+    context "improper argument" do
       let(:expectation) { false }
-      it {}
+
+      context "string" do
+        let(:arg) { "! 1" }
+        it {}
+      end
+
+      context "not a string" do
+        let(:arg) { 1 }
+        it {}
+      end
     end
 
     context "operators" do
       let(:expectation) { true }
+
+      before do
+        expect_any_instance_of(String).
+          to receive(:strip).
+            at_least(:once).
+              and_call_original
+      end
 
       context "inequality (!=)" do
         let(:arg) { "!= 1" }
