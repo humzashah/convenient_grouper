@@ -8,3 +8,9 @@ before_install:
   - 'gem install bundler'
 script:
   - 'bundle exec rspec'
+notifications:
+  email:
+    recipients:
+      - humzashah+travis@gmail.com
+    on_success: never
+    on_failure: always
