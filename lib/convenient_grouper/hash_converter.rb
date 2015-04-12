@@ -1,12 +1,9 @@
 require_relative "error"
+require_relative "regex"
 
 module ConvenientGrouper
   class HashConverter
     attr_reader :groups, :restrictions
-
-    module Regex
-      COMPARISON = /^[<, >]={0,1}\s.+$/ # e.g. '> 1' and '<= 4'
-    end
 
     module Default
       GROUP = 'others'
@@ -94,7 +91,7 @@ module ConvenientGrouper
         range_str(value)
       when Array
         array_str(value)
-      when ->(x) { Regex::COMPARISON.match(x.to_s) }
+      when Regex.matcher
         value
       when Numeric, String
         value_str(value)

@@ -77,6 +77,14 @@ describe ConvenientGrouper::HashConverter do
 
   describe "instance methods" do
     subject { instance.public_send(method) }
+
+    before do
+      expect(ConvenientGrouper::Regex).
+        to receive(:matcher).
+          at_least(:once).
+            and_call_original
+    end
+
     after { expect(subject).to eq(expected) }
 
     describe "groups" do
