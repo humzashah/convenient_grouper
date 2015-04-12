@@ -8,21 +8,42 @@ module ConvenientGrouper
       COMPARISON = /^[<, >]={0,1}\s.+/ # e.g. '> 1', '<= 4'
     end
 
-    DEFAULT_GROUP = 'others'
+    module Default
+      GROUP = 'others'
 
-    def initialize(hash_arg, restrict: false)
-      @hash = hash_arg
-      @restrict = restrict
-
-      validate_hash
-      create_groups
-      create_restrictions
+      OPTIONS = {
+        restrict: false
+      }
     end
 
     private
 
+    def initialize(hash_arg, options=Default::OPTIONS)
+      @hash = hash_arg
+      validate_hash
+
+      @options = options
+      validate_options
+
+      @restrict = (@options[:restrict] == true)
+
+      create_groups
+      create_restrictions
+    end
+
     def validate_hash
       raise_error("Incompatible hash: #{@hash}.") unless matches_conditions?
+    end
+
+    def validate_options
+      valid_keys = Default::OPTIONS.keys
+      invalid_keys = @options.keys - valid_keys
+      return if valid = invalid_keys.empty?
+
+      valid_keys_str = valid_keys.join(', ')
+      invalid_keys_str = invalid_keys.join(', ')
+      raise CustomError
+      raise_error "You provided invalid options: #{invalid_keys_str}. Supported options include: #{valid_keys_str}."
     end
 
     def matches_conditions?
@@ -60,7 +81,7 @@ module ConvenientGrouper
 
     def default_group
       hash = @hash.values.first
-      group = hash[nil] || DEFAULT_GROUP
+      group = hash[nil] || Default::GROUP
       "ELSE '#{group}'"
     end
 
@@ -99,9 +120,8 @@ module ConvenientGrouper
     end
 
     def array_str(array)
-      _mapped = array.map { |v| insert_val(v) }
-      mapped = _mapped.join(', ')
-      "IN (#{mapped})"
+      mapped_str = array.map { |v| insert_val(v) }.join(', ')
+      "IN (#{mapped_str})"
     end
 
     def value_str(value)

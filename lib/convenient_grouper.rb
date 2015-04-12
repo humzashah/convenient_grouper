@@ -1,7 +1,6 @@
-require "convenient_grouper/version"
-
 require "active_record"
-require_relative "convenient_grouper/hash_converter"
+require "convenient_grouper/hash_converter"
+require "convenient_grouper/version"
 
 module ConvenientGrouper
   module_function
@@ -19,13 +18,8 @@ module ConvenientGrouper
   module_function
 
   def get_hash_converter(hash_arg, opts)
-    if hash_arg.is_a?(Hash)
-      begin
-        ConvenientGrouper::HashConverter.new(hash_arg, opts)
-      rescue ConvenientGrouper::CustomError => e
-        puts "ConvenientGrouper: #{e.message}"
-      end
-    end
+    return unless hash_arg.is_a?(Hash)
+    ConvenientGrouper::HashConverter.new(hash_arg, opts)
   end
 
   def get_groups(hc, hash_arg)
@@ -39,9 +33,13 @@ end
 
 ActiveRecord::Relation.class_eval do
   define_method :group do |hash_arg, opts={}|
-    hash = ConvenientGrouper.preliminaries(hash_arg, opts)
-    groups = hash[:groups]
-    restrictions = hash[:restrictions]
-    super(groups).where(restrictions)
+    if hash_arg.is_a?(Hash)
+      hash = ConvenientGrouper.preliminaries(hash_arg, opts)
+      groups = hash[:groups]
+      restrictions = hash[:restrictions]
+      super(groups).where(restrictions)
+    else
+      super(hash_arg)
+    end
   end
 end

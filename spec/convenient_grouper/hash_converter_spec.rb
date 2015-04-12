@@ -92,7 +92,7 @@ describe ConvenientGrouper::HashConverter do
       end
 
       context "without default group" do
-        let(:default) { described_class::DEFAULT_GROUP }
+        let(:default) { described_class::Default::GROUP }
         it {}
       end
     end
