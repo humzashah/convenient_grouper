@@ -96,12 +96,12 @@ describe ConvenientGrouper::HashConverter do
 
       context "with default group" do
         let(:default) { 'def' }
-        it {}
+        it("is as expected") {}
       end
 
       context "without default group" do
         let(:default) { described_class::Default::GROUP }
-        it {}
+        it("is as expected") {}
       end
     end
 
@@ -113,7 +113,7 @@ describe ConvenientGrouper::HashConverter do
         let(:expected) do
           "(age = 1) OR (age BETWEEN 2 AND 5) OR (age IN ('one', 'two')) OR (age > 6) OR (age >= 7) OR (age < 8) OR (age <= 9) OR (age IS NULL)"
         end
-        it {}
+        it("is as expected") {}
       end
 
       context "unrestricted" do
