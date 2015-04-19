@@ -4,7 +4,7 @@ describe ConvenientGrouper do
 
   describe "gem basics" do
     it 'has a version number' do
-      expect(ConvenientGrouper::VERSION).to_not be nil
+      expect(described_class::VERSION.to_f).to be > 0
     end
   end
 
@@ -16,7 +16,7 @@ describe ConvenientGrouper do
       let(:options) { {one: 1} }
 
       it "raises error for improper options" do
-        expect{ subject }.to raise_error(ConvenientGrouper::Error)
+        expect{ subject }.to raise_error(described_class::Error)
       end
     end
 
