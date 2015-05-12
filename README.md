@@ -4,6 +4,8 @@ This gem simplifies grouping records. The primary intention is to make group-agg
 
 To use, add the following to your Gemfile.
 
+[![Build Status](https://travis-ci.org/humzashah/convenient_grouper.svg?branch=master)](https://travis-ci.org/humzashah/convenient_grouper)
+
 ```ruby
 gem 'convenient_grouper'
 ```
@@ -39,9 +41,8 @@ grouping_hash = {
 Second argument is an optional hash:
 
 ```ruby
-options = {
-  restrict: boolean # restrict query to grouped conditions. defaults to false.
-}
+# restrict query to grouped conditions. defaults to false.
+options = { restrict: boolean }
 ```
 
 If you pass only one non-hash argument, you will be using `ActiveRecord`'s own `group` method.
