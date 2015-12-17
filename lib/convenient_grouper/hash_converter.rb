@@ -68,9 +68,11 @@ module ConvenientGrouper
     end
 
     def parse_hash
-      @hash.each_with_object([]) do |(column, values_hash), array|
-        values_hash.each do |group, value|
-          array << yield(column, group, value) if group
+      [].tap do |array|
+        @hash.each do |column, values_hash|
+          values_hash.each do |group, value|
+            array << yield(column, group, value) if group
+          end
         end
       end
     end
